@@ -2,3 +2,5 @@ fastapi
 uvicorn
 pyodbc
 python-dotenv   # Only if you're using the .env file
+flask
+flask_sqlalchemy
