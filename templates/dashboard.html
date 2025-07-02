@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+</head>
+<body>
+    <h1>Admin Dashboard</h1>
+
+    <h2>Create New Event</h2>
+    <form action="/admin/create" method="POST">
+        Name: <input type="text" name="name"><br>
+        Description: <input type="text" name="description"><br>
+        Location: <input type="text" name="location"><br>
+        Date: <input type="text" name="date"><br>
+        Capacity: <input type="number" name="capacity"><br>
+        <button type="submit">Create</button>
+    </form>
+
+    <h2>Existing Events</h2>
+    <ul>
+        {% for event in events %}
+            <li>
+                {{ event.name }} - {{ event.date }} - 
+                <a href="/admin/delete/{{ event.id }}">Delete</a>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
