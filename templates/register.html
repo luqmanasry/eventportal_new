@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Register for Event</title>
+</head>
+<body>
+  <h1>Register</h1>
+  <form id="registerForm">
+    Name: <input type="text" id="name" required><br>
+    Email: <input type="email" id="email" required><br>
+    Event ID: <input type="number" id="eventId" required><br>
+    <button type="submit">Register</button>
+  </form>
+
+  <p id="result"></p>
+
+  <script>
+    const form = document.getElementById('registerForm');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = {
+        name: document.getElementById('name').value,
+        email: document.getElementById('email').value,
+        event_id: parseInt(document.getElementById('eventId').value)
+      };
+
+      const res = await fetch('https://eventportal1-egh0heb7g3h2cfdd.southeastasia-01.azurewebsites.net/attendees', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      const result = await res.json();
+      document.getElementById('result').textContent = result.message || result.detail;
+    });
+  </script>
+</body>
+</html>

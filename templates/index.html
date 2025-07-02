@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>All Events</title>
+</head>
+<body>
+  <h1>Upcoming Events</h1>
+  <ul id="eventList"></ul>
+
+  <script>
+    fetch('https://eventportal1-egh0heb7g3h2cfdd.southeastasia-01.azurewebsites.net/events')
+      .then(response => response.json())
+      .then(data => {
+        const list = document.getElementById('eventList');
+        data.forEach(event => {
+          const li = document.createElement('li');
+          li.textContent = `${event.name} - ${event.date} @ ${event.location}`;
+          list.appendChild(li);
+        });
+      });
+  </script>
+</body>
+</html>

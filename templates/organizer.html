@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Organizer Dashboard</title>
+</head>
+<body>
+  <h1>Manage Events</h1>
+
+  <form id="eventForm">
+    ID (for update/delete): <input type="number" id="id"><br>
+    Name: <input type="text" id="name" required><br>
+    Description: <input type="text" id="description"><br>
+    Date: <input type="datetime-local" id="date"><br>
+    Location: <input type="text" id="location"><br>
+    Capacity: <input type="number" id="capacity"><br>
+    <button type="submit">Create Event</button>
+    <button type="button" onclick="updateEvent()">Update</button>
+    <button type="button" onclick="deleteEvent()">Delete</button>
+  </form>
+
+  <p id="responseMsg"></p>
+
+  <script>
+    document.getElementById('eventForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = {
+        name: document.getElementById('name').value,
+        description: document.getElementById('description').value,
+        date: document.getElementById('date').value,
+        location: document.getElementById('location').value,
+        capacity: parseInt(document.getElementById('capacity').value)
+      };
+
+      const res = await fetch('https://eventportal1-egh0heb7g3h2cfdd.southeastasia-01.azurewebsites.net/events', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      const result = await res.json();
+      document.getElementById('responseMsg').textContent = result.message || result.detail;
+    });
+
+    async function updateEvent() {
+      const id = document.getElementById('id').value;
+      const data = {
+        name: document.getElementById('name').value,
+        description: document.getElementById('description').value,
+        date: document.getElementById('date').value,
+        location: document.getElementById('location').value,
+        capacity: parseInt(document.getElementById('capacity').value)
+      };
+
+      const res = await fetch(`https://eventportal1-egh0heb7g3h2cfdd.southeastasia-01.azurewebsites.net/events/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      const result = await res.json();
+      document.getElementById('responseMsg').textContent = result.message || result.detail;
+    }
+
+    async function deleteEvent() {
+      const id = document.getElementById('id').value;
+      const res = await fetch(`https://eventportal1-egh0heb7g3h2cfdd.southeastasia-01.azurewebsites.net/events/${id}`, {
+        method: 'DELETE'
+      });
+      const result = await res.json();
+      document.getElementById('responseMsg').textContent = result.message || result.detail;
+    }
+  </script>
+</body>
+</html>
