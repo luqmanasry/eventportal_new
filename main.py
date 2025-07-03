@@ -110,4 +110,4 @@ def submit_event():
         return f"<h2>Error: {str(e)}</h2><a href='/event-form'>Back</a>"
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8000, debug=True)
+    app.run(debug=True)
