@@ -2,22 +2,60 @@
 <html>
 <head>
   <title>All Events</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 30px;
+      background-color: #f5f5f5;
+    }
+    h1 {
+      color: #333;
+    }
+    .event-card {
+      background-color: #fff;
+      border: 1px solid #ccc;
+      padding: 16px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .event-card h2 {
+      margin-top: 0;
+    }
+    .event-card p {
+      margin: 4px 0;
+    }
+  </style>
 </head>
 <body>
   <h1>Upcoming Events</h1>
-  <ul id="eventList"></ul>
+  <div id="eventList"></div>
 
   <script>
     fetch('https://eventportal1-egh0heb7g3h2cfdd.southeastasia-01.azurewebsites.net/events')
       .then(response => response.json())
       .then(data => {
         const list = document.getElementById('eventList');
+        list.innerHTML = ''; // Clear in case of reload
+
         data.forEach(event => {
-          const li = document.createElement('li');
-          li.textContent = `${event.name} - ${event.date} @ ${event.location}`;
-          list.appendChild(li);
+          const card = document.createElement('div');
+          card.className = 'event-card';
+          card.innerHTML = `
+            <h2>${event.name}</h2>
+            <p><strong>Description:</strong> ${event.description}</p>
+            <p><strong>Date:</strong> ${event.date}</p>
+            <p><strong>Location:</strong> ${event.location}</p>
+            <p><strong>Capacity:</strong> ${event.capacity}</p>
+          `;
+          list.appendChild(card);
         });
+      })
+      .catch(error => {
+        console.error('Error loading events:', error);
+        document.getElementById('eventList').innerHTML = '<p>Failed to load events.</p>';
       });
   </script>
 </body>
 </html>
+
