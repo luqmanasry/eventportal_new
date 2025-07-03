@@ -38,7 +38,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="C:\Users\Luqman\event_portal\eventhorizon-api\venv"
+VIRTUAL_ENV="C:\Users\Luqman\Downloads\eventhorizon-api\venv"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"
