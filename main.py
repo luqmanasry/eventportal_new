@@ -108,6 +108,3 @@ def submit_event():
         return f"<h2>Event '{name}' created successfully!</h2><a href='/event-form'>Back</a>"
     except Exception as e:
         return f"<h2>Error: {str(e)}</h2><a href='/event-form'>Back</a>"
-
-if __name__ == "__main__":
-    app.run(debug=True)
