@@ -1,51 +1,101 @@
-from fastapi import FastAPI, Query, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
+from flask import Flask, render_template, request, jsonify
+from flask_cors import CORS
 import pyodbc
 import os
 from dotenv import load_dotenv
-from typing import Optional
 
-# Load environment variables from .env file
+# Load environment variables
 load_dotenv()
-
-# Get DB connection string from environment variable
-conn_str = os.getenv("DB_CONN_STR")
-
-# Initialize FastAPI app
-app = FastAPI()
-
-# Enable CORS (for Swagger UI and frontend compatibility)
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],  # Allow all origins (change in production)
-    allow_credentials=True,
-    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allow_headers=["*"],
+#os.getenv("DB_CONN_STR")
+conn_str = (
+    "DRIVER={ODBC Driver 17 for SQL Server};"
+    "SERVER=tcp:eventhorizondatabase-sql.database.windows.net,1433;"
+    "DATABASE=eventhorizonDB;"
+    "UID=Admin1;" 
+    "PWD=Luqman123;" 
+    "Encrypt=yes;"
+    "TrustServerCertificate=no;"
+    "Connection Timeout=30;"
 )
 
-@app.get("/events")
+app = Flask(__name__)
+CORS(app)  # Enable CORS
+app.template_folder = "templates"  # Flask uses this by default
+
+# Home route (index.html)
+@app.route('/')
+def home():
+    return render_template('index.html')
+
+# Route to render dashboard.html
+@app.route('/dashboard')
+def dashboard():
+    return render_template('dashboard.html')
+
+# Route to render event_form.html
+@app.route('/event-form')
+def event_form():
+    return render_template('event_form.html')
+
+# Route to render organizer.html
+@app.route('/organizer')
+def organizer():
+    return render_template('organizer.html')
+
+# Route to render register.html
+@app.route('/register')
+def register():
+    return render_template('register.html')
+
+
+# Get all events (returns JSON)
+@app.route('/events', methods=['GET'])
 def get_events():
     try:
         with pyodbc.connect(conn_str) as conn:
             cursor = conn.cursor()
             cursor.execute("SELECT * FROM Events")
             rows = cursor.fetchall()
-            return [
-                dict(zip([column[0] for column in cursor.description], row))
-                for row in rows
-            ]
+            columns = [column[0] for column in cursor.description]
+            results = [dict(zip(columns, row)) for row in rows]
+            return jsonify(results)
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        return jsonify({'error': str(e)}), 500
 
-@app.post("/events")
-def create_event(
-    name: str = Query(..., description="Name of the event"),
-    description: str = Query(..., description="Description of the event"),
-    date: str = Query(..., description="Date of the event"),
-    location: str = Query(..., description="Location of the event"),
-    capacity: int = Query(..., description="Capacity of the event")
-):
+# Create a new event (via query params)
+@app.route('/events', methods=['POST'])
+def create_event():
     try:
+        name = request.args.get('name')
+        description = request.args.get('description')
+        date = request.args.get('date')
+        location = request.args.get('location')
+        capacity = request.args.get('capacity')
+
+        if not all([name, description, date, location, capacity]):
+            return jsonify({"error": "Missing required query parameters"}), 400
+
+        with pyodbc.connect(conn_str) as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                "INSERT INTO Events (name, description, date, location, capacity) VALUES (?, ?, ?, ?, ?)",
+                name, description, date, location, int(capacity)
+            )
+            conn.commit()
+            return jsonify({"message": "Event created successfully"})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/submit-event', methods=['POST'])
+def submit_event():
+    try:
+        name = request.form['name']
+        description = request.form['description']
+        date = request.form['date']
+        location = request.form['location']
+        capacity = int(request.form['capacity'])
+
+        # Optional: Insert into database here
         with pyodbc.connect(conn_str) as conn:
             cursor = conn.cursor()
             cursor.execute(
@@ -53,10 +103,10 @@ def create_event(
                 name, description, date, location, capacity
             )
             conn.commit()
-            return {"message": "Event created successfully"}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
 
-    if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+        return f"<h2>Event '{name}' created successfully!</h2><a href='/event-form'>Back</a>"
+    except Exception as e:
+        return f"<h2>Error: {str(e)}</h2><a href='/event-form'>Back</a>"
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=8000, debug=True)
