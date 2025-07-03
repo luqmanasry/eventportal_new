@@ -26,7 +26,7 @@ app.template_folder = "templates"  # Flask uses this by default
 @app.route('/')
 def home():
     #return render_template('index.html')
-    return "Test";
+    return "fix";
 
 # Route to render dashboard.html
 @app.route('/dashboard')
