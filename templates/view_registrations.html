@@ -1,0 +1,85 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>EventHorizon - View Registrations</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f7f9;
+    }
+
+    header {
+      background-color: #2d3e50;
+      color: white;
+      padding: 20px 40px;
+      text-align: center;
+    }
+
+    main {
+      max-width: 800px;
+      margin: 30px auto;
+      padding: 20px;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    h2 {
+      text-align: center;
+      color: #2d3e50;
+      margin-bottom: 30px;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      padding: 12px;
+      border-bottom: 1px solid #ddd;
+      color: #333;
+    }
+
+    li:last-child {
+      border-bottom: none;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 20px;
+      text-decoration: none;
+      color: #3498db;
+      font-weight: bold;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>View Event Registrations</h1>
+  </header>
+
+  <main>
+    <h2>Registered Users</h2>
+
+    {% if users and users|length > 0 %}
+      <ul>
+        {% for user in users %}
+          <li>{{ user }}</li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p style="text-align:center; color:#c0392b;">No users registered for this event.</p>
+    {% endif %}
+
+    <a href="/" class="back-link">← Back to Home</a>
+  </main>
+</body>
+</html>

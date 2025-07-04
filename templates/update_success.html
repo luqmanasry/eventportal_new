@@ -1,0 +1,87 @@
+<!-- templates/update_success.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Event Updated</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f7f9;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #2d3e50;
+      color: white;
+      padding: 20px 40px;
+      text-align: center;
+    }
+
+    nav {
+      background-color: #1b2a38;
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      padding: 10px 0;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    main {
+      max-width: 800px;
+      margin: 40px auto;
+      background: white;
+      padding: 40px;
+      text-align: center;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    h2 {
+      color: #2d3e50;
+    }
+
+    a.btn {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #2d3e50;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+    }
+
+    a.btn:hover {
+      background-color: #1b2a38;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>EventHorizon Portal</h1>
+  </header>
+
+  <nav>
+    <a href="/">Home</a>
+    <a href="/event-form">Create Event</a>
+    <a href="/register">Register</a>
+    <a href="/organizer">Organizer Login</a>
+  </nav>
+
+  <main>
+    <h2>Event updated successfully!</h2>
+    <a href="/" class="btn">Back to Home</a>
+  </main>
+</body>
+</html>
